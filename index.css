@@ -1,0 +1,20 @@
+
+/* Reseta o estilo do browser */
+* {
+    margin: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial;
+    line-height: 1.5;
+    color: #333333;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    min-height: 100vh;
+    max-width: 500px;
+    margin:  0 auto;
+    padding: 0 20px;
+  }
+  
