@@ -17,6 +17,7 @@
         <h4 class="card-title">Sistema de Vagas</h4>
       </div>
       
+      <!-- Cadastro vaga -->
       <div class="card-body" id="vaga-section">
         <h5 class="card-title vagar-codename">Cadastrar nova vaga</h5>
         <form>
@@ -27,7 +28,7 @@
             </div>
             <div class="form-group col-md">
               <label for="turing-amount">Exigencias</label>
-              <input class="form-control" id="vaga-exigencia"/>
+              <input class="form-control" id="new-vaga-exigencia"/>
             </div>
           </div>
           <div class="form-row">
@@ -36,16 +37,49 @@
         </form>
       </div>
 
+      <!-- Consulta vaga -->
       <div class="card-body" id="vaga-section">
         <h5 class="card-title vagar-codename" onclick="loadVagaName()">Consultar vaga</h5>
         <form>
           <div class="form-row">
             <div class="form-group col-md">
               <label for="codename-select">Nome</label>
-              <select class="form-control" id="result-select"> </select>
+              <select class="form-control" id="vaga-name-select" onchange="loadExigenciasByName()"> </select>
             </div>
           </div>
+      <!-- Exigencias para a vaga selecionada -->
+          <div class="form-row">
+            <div class="form-group col-md">
+              <label for="codename-select">Exigencias</label>
+              <input class="form-control" id="select-vaga-exigencia" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <input class="form-control btn-primary" type="button" value="Editar Exigencia" id="edit-vaga" onclick="editExigencias()" />
+          </div>
         </form>
+      </div>
+
+      <!-- Submissão de currículo -->
+      <div class="card-body" id="vaga-section">
+        <h5 class="card-title vagar-codename" onclick="setNewCurriculo()">Submeter currículo:</h5>
+        <form>
+          <div id="div_show"></div>
+          <input class="form-control btn-primary" type="button" value="Submeter Currículo" id="edit-vaga" onclick="setNewCurriculo()" />
+        </form>
+      </div>
+
+      <!-- Curriculos submetidos -->
+      <div class="card-body" id="vaga-section">
+        <h5 class="card-title vagar-codename" onclick="loadCurriculoCPF()">Consultar curriculo</h5>
+        <form>
+          <div class="form-row">
+            <div class="form-group col-md">
+              <label for="codename-select">Nome</label>
+              <select class="form-control" id="curriculo-cpf-select" onchange=""> </select>
+            </div>
+          </div>
       </div>
 
     <!-- Importing Ethers.js script -->
