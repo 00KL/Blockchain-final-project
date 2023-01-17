@@ -345,6 +345,17 @@ const loadVagaName = async () => {
 	}
 }
 
+const loadCurriculoVagaName = async () => {
+	console.log("loadCurriculoVagaName")
+	VagaNameOptions = await Contract.getAllNomesVagas();
+      var selectBox2 = document.querySelector("#curriculo-vaga-name-select");
+	  removeOptions(selectBox);
+      for(var i = 0, l = VagaNameOptions.length; i < l; i++){
+        var codenameOption = VagaNameOptions[i];
+		selectBox2.options.add( new Option(codenameOption, codenameOption, false) );
+	}
+}
+
 // Consulta de vagas
 const loadExigenciasByName = async () => {
 	console.log("loadExigenciasByName")
@@ -370,7 +381,7 @@ const loadCurriculo = async () => {
 	console.log("show, itens: ")
 	const container = document.getElementById("div_show");
 	let  fields = '';
-	const selected_vaga =  document.querySelector("#vaga-name-select").value
+	const selected_vaga =  document.querySelector("#curriculo-vaga-name-select").value
 	const vaga_exigencias = await Contract.getVagaExigencia(selected_vaga)
 
 	fields += '<div class="form-row">';
@@ -396,9 +407,8 @@ const loadCurriculo = async () => {
   // Criar novo currículo
   const setNewCurriculo = async () => {
 	console.log("setNewCurriculo")
-	const curriculo_vaga_name = document.querySelector("#vaga-name-select").value
 	const curriculo_cpf = document.querySelector("#cpf").value
-	const selected_vaga =  document.querySelector("#vaga-name-select").value
+	const selected_vaga =  document.querySelector("#curriculo-vaga-name-select").value
 	const vaga_exigencias = await Contract.getVagaExigencia(selected_vaga)
 	const curriculo_respostas = []
 	for (item of vaga_exigencias) {
@@ -410,7 +420,7 @@ const loadCurriculo = async () => {
 
   const loadCurriculoCPF = async () => {
 	console.log("loadCurriculoCPF")
-	const curriculo_vaga_name = document.querySelector("#vaga-name-select").value
+	const curriculo_vaga_name = document.querySelector("#curriculo-vaga-name-select").value
 	console.log(curriculo_vaga_name)
 	CurriculoCPFOptions = await Contract.getVagaCPFsByName(curriculo_vaga_name)
       var selectBox = document.querySelector("#curriculo-cpf-select");

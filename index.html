@@ -11,7 +11,7 @@
 
     <title>Final dApp</title>
   </head>
-  <body style="margin:0 auto;">
+  <body style="margin:5% 25% 25% 25%;">
     <div class="card" style="width: 30rem;">
       <div class="card-header" style="display: flex; justify-content: center;">
         <h4 class="card-title">Sistema de Vagas</h4>
@@ -37,6 +37,8 @@
         </form>
       </div>
 
+      <hr>
+
       <!-- Consulta vaga -->
       <div class="card-body" id="vaga-section">
         <h5 class="card-title vagar-codename" onclick="loadVagaName()">Consultar vaga</h5>
@@ -61,14 +63,24 @@
         </form>
       </div>
 
+      <hr>
+
       <!-- Submissão de currículo -->
       <div class="card-body" id="vaga-section">
-        <h5 class="card-title vagar-codename" onclick="setNewCurriculo()">Submeter currículo:</h5>
+        <h5 class="card-title vagar-codename" onclick="">Submeter currículo:</h5>
+        <div class="form-row">
+          <div class="form-group col-md">
+            <label for="codename-select">Selecione a vaga que deseja aplicar</label>
+            <select class="form-control" id="curriculo-vaga-name-select" onchange="loadCurriculo()"> </select>
+          </div>
+        </div>
         <form>
           <div id="div_show"></div>
           <input class="form-control btn-primary" type="button" value="Submeter Currículo" id="edit-vaga" onclick="setNewCurriculo()" />
         </form>
       </div>
+
+      <hr>
 
       <!-- Curriculos submetidos -->
       <div class="card-body" id="vaga-section">
