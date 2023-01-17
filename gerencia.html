@@ -25,8 +25,15 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link active"  href="/index.html">Gerencia</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" role="button" aria-expanded="false">Gerencia</a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                          <li><a class="dropdown-item" href="#">Action</a></li>
+                          <li><a class="dropdown-item" href="#">Another action</a></li>
+                          <li><a class="dropdown-item" href="#">Something else here</a></li>
+                          <li><hr class="dropdown-divider"></li>
+                          <li><a class="dropdown-item" href="#">Separated link</a></li>
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Submissão</a>
@@ -39,7 +46,10 @@
         </div>
     </nav>
 
-    <div class="card text-white mb-3" style="margin: 2% auto auto auto; width: 70rem; font-size: 20px; background-color: #3B3B3B;">
+
+
+    <div class="card text-white mb-3"
+        style="margin: 2% auto auto auto; width: 70rem; font-size: 20px; background-color: #3B3B3B;">
         <div class="card-header" style="display: flex; justify-content: center;">
             <h2 class="card-title">Gerencia</h2>
         </div>
@@ -47,7 +57,8 @@
         <!-- Cadastro vaga -->
         <div class="card-body" id="vaga-section">
             <h3 class="card-title">Cadastrar nova vaga</h3>
-            <h6 class="card-subtitle mb-2 text-muted">Digite o nome da nova vaga e as exigências da mesma separadas por virgula.</h6>
+            <h6 class="card-subtitle mb-2 text-muted">Digite o nome da nova vaga e as exigências da mesma separadas por
+                virgula.</h6>
             <form>
                 <div class="form-row">
                     <div class="form-group col-md">
@@ -61,7 +72,8 @@
                 </div>
                 <br>
                 <div class="form-row">
-                    <input class="form-control btn-success" style="font-size:25px;" type="button" value="Cadastrar" id="set-new-vaga" />
+                    <input class="form-control btn-success" style="font-size:25px;" type="button" value="Cadastrar"
+                        id="set-new-vaga" />
                 </div>
             </form>
         </div>
@@ -70,7 +82,8 @@
         <!-- Consulta vaga -->
         <div class="card-body" id="vaga-section">
             <h3 class="card-title vagar-codename" onclick="loadCurriculoVagaName()">Consultar vaga</h3>
-            <h6 class="card-subtitle mb-2 text-muted">Selecione um dos nomes das vagas criadas para exibir/editar suas exigências.</h6>
+            <h6 class="card-subtitle mb-2 text-muted">Selecione um dos nomes das vagas criadas para exibir/editar suas
+                exigências.</h6>
             <form>
                 <div class="form-row">
                     <div class="form-group col-md">
@@ -87,18 +100,60 @@
                 </div>
                 <br>
                 <div class="form-row">
-                    <input class="form-control btn-success" style="font-size:25px;" type="button" value="Editar Exigencia" id="edit-vaga"
-                        onclick="editExigencias()" />
+                    <input class="form-control btn-success" style="font-size:25px;" type="button"
+                        value="Editar Exigencia" id="edit-vaga" onclick="editExigencias()" />
                 </div>
             </form>
         </div>
+
+        <!-- Status de um currículo -->
+        <div class="card-body" id="vaga-section">
+            <h3 class="card-title vagar-codename" onclick="loadCurriculoVagaName()">Status do currículo</h3>
+            <h6 class="card-subtitle mb-2 text-muted">
+                Selecione uma vaga, depois selecione um cpf afim de verificar suas respostas e seu status.
+            </h6>
+            <form>
+                <div class="form-row">
+                    <div class="form-group col-md">
+                        <label for="codename-select">Nome</label>
+                        <select class="form-control" id="status-curriculo-vaga-name-select" onchange=""> </select>
+                    </div>
+                </div>
+                <!-- Seleção de cpf para conseguir o currículo associado a ele -->
+                <div class="form-row">
+                    <div class="form-group col-md">
+                        <label for="codename-select">CPF</label>
+                        <select class="form-control" id="cpf-curriculo-select" onchange=""></select>
+                    </div>
+                </div>
+                <br>
+                <div class="form-row">
+                    <div class="form-group col-md">
+                        <label for="codename-select">Currículo</label>
+                    </div>
+                </div>
+                <br>
+                <div class="form-row">
+                    <div class="form-group col-md">
+                        <label for="codename-select">Status</label>
+                        <select class="form-control" id="status-curriculo-select" onchange=""></select>
+                    </div>
+                </div>
+                <br>
+                <div class="form-row">
+                    <input class="form-control btn-success" style="font-size:25px;" type="button" value="Editar status"
+                        id="edit-vaga" onclick="" />
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+
     </div>
 
     <!-- Importing Ethers.js script -->
-    <script
-      src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
-      type="application/javascript"
-    ></script>
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
 
     <!-- Importing our javascript file -->
     <script src="./index.js"></script>
