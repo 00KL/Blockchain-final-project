@@ -306,8 +306,8 @@ window.onload = async () => {
 	//   const checkTeacher = await Contract.getVagaExigencia("gerente");
 	//   console.log("test",checkTeacher,"test");
 	  
-	  loadVagaName();
-	//   loadVagaNameSubmissao();
+	//   loadVagaName();
+	  loadVagaNameSubmissao();
     });
   });
 
@@ -331,32 +331,12 @@ const setNewVaga = () => {
 
   }
 
-// Creating variables for reusable dom elements
-const setNewVagaButton = document.querySelector("#set-new-vaga");
-// Adding event listeners to the buttons
-setNewVagaButton.addEventListener("click", setNewVaga);
-const loadVagaName = async () => {
-	VagaNameOptions = await Contract.getAllNomesVagas();
 
-	var selectBox = document.querySelector("#vaga-name-select");
-	// var selectBox2 = document.querySelector("#status-curriculo-vaga-name-select");
-	removeOptions(selectBox);
-	// removeOptions(selectBox2);
-	selectBox.options.add (new Option("Selecione uma vaga", "Selecione uma vaga", false));
-	// selectBox2.options.add (new Option("Selecione uma vaga", "Selecione uma vaga", false));
-	console.log("loadVagaName")
-      for(var i = 0, l = VagaNameOptions.length; i < l; i++){
-        var codenameOption = VagaNameOptions[i];
-
-        selectBox.options.add( new Option(codenameOption, codenameOption, false) );
-		// selectBox2.options.add( new Option(codenameOption, codenameOption, false) );
-	}
-}
 
 const loadVagaNameSubmissao = async () => {
 	console.log("loadVagaNameSubmissao")
 	VagaNameOptions = await Contract.getAllNomesVagas();
-	var selectBox = document.querySelector("#submissao-vaga-name-select");
+	var selectBox = document.querySelector("#curriculo-vaga-name-select");
 	removeOptions(selectBox);
 	selectBox.options.add (new Option("Selecione uma vaga", "Selecione uma vaga", false));
 	for(var i = 0, l = VagaNameOptions.length; i < l; i++){
@@ -390,16 +370,6 @@ const loadConsultaVagaName = async () => {
 		selectBox.options.add( new Option(codenameOption, codenameOption, false) );
 		// selectBox2.options.add( new Option(codenameOption, codenameOption, false) );
 	}
-}
-
-// Consulta de vagas
-const loadExigenciasByName = async () => {
-	console.log("loadExigenciasByName")
-	const selected_vaga =  document.querySelector("#vaga-name-select").value
-	const vaga_exigencias = await Contract.getVagaExigencia(selected_vaga)
-	console.log("Exigencia da vaga selecionada: ",vaga_exigencias)
-	document.querySelector("#select-vaga-exigencia").value = vaga_exigencias
-	loadCurriculo()
 }
 
 // Edita vaga
@@ -436,6 +406,7 @@ const loadCurriculo = async () => {
 		fields += '</div>';
 		fields += '</div>';
 	}
+	fields += '<br>';
 	container.innerHTML = fields;
   }
 
@@ -451,7 +422,7 @@ const loadCurriculo = async () => {
 		curriculo_respostas.push(document.querySelector("#exigencia_"+item).value)
 	}
 	console.log(curriculo_respostas)
-	Contract.createVagaCurriculo(curriculo_vaga_name, curriculo_cpf, curriculo_respostas)
+	Contract.createVagaCurriculo(selected_vaga, curriculo_cpf, curriculo_respostas)
   }
 
   const loadCurriculoCPF = async () => {

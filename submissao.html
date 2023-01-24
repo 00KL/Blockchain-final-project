@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Final dApp</title>
+</head>
+
+<body style="background-color: #545454; color: rgba(255,255,255,.55);">
+    <nav class="navbar navbar-expand-xl navbar-dark" style="font-size: 27px; background-color: #3B3B3B;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="./assets/icone-curriculo.svg" width="70" height="70" alt="">
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+                aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" href="/gerencia.html">Gerencia</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Submissão</a>
+                    </li>
+                </ul>
+                <span class="navbar-text">
+                    Sistema de submissão e apreciação de currículos
+                </span>
+            </div>
+        </div>
+    </nav>
+
+
+
+    <div class="card text-white mb-3"
+        style="margin: 2% auto auto auto; width: 70rem; font-size: 20px; background-color: #3B3B3B;">
+        <div class="card-header" style="display: flex; justify-content: center;">
+            <h2 class="card-title">Submissão</h2>
+        </div>
+
+       <!-- Submissão de currículo -->
+      <div class="card-body" id="vaga-section">
+        <h5 class="card-title" onclick="">Submeter currículo:</h5>
+        <div class="form-row">
+          <div class="form-group col-md">
+            <label for="codename-select">Selecione a vaga que deseja aplicar</label>
+            <select class="form-control" id="curriculo-vaga-name-select" onchange="loadCurriculo()"> </select>
+          </div>
+        </div>
+        <br>
+        <form>
+          <div id="div_show"></div>
+          <input class="form-control btn-success" style="font-size:25px;"  type="button" value="Submeter Currículo" id="edit-vaga" onclick="setNewCurriculo()" />
+        </form>
+      </div>
+
+    </div>
+
+
+    <!-- Importing Ethers.js script -->
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+
+    <!-- Importing our javascript file -->
+    <script src="./submissao.js"></script>
+
+</body>
+
+</html>

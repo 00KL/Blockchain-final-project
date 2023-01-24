@@ -339,17 +339,17 @@ const loadVagaName = async () => {
 	VagaNameOptions = await Contract.getAllNomesVagas();
 
 	var selectBox = document.querySelector("#vaga-name-select");
-	// var selectBox2 = document.querySelector("#status-curriculo-vaga-name-select");
+	var selectBox2 = document.querySelector("#status-curriculo-vaga-name-select");
 	removeOptions(selectBox);
-	// removeOptions(selectBox2);
+	removeOptions(selectBox2);
 	selectBox.options.add (new Option("Selecione uma vaga", "Selecione uma vaga", false));
-	// selectBox2.options.add (new Option("Selecione uma vaga", "Selecione uma vaga", false));
+	selectBox2.options.add (new Option("Selecione uma vaga", "Selecione uma vaga", false));
 	console.log("loadVagaName")
       for(var i = 0, l = VagaNameOptions.length; i < l; i++){
         var codenameOption = VagaNameOptions[i];
 
         selectBox.options.add( new Option(codenameOption, codenameOption, false) );
-		// selectBox2.options.add( new Option(codenameOption, codenameOption, false) );
+		selectBox2.options.add( new Option(codenameOption, codenameOption, false) );
 	}
 }
 
