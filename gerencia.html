@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<!-- Importing Ethers.js script -->
+<script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+
+<!-- Importing our javascript file -->
+<script src="./gerencia.js" type="module"></script>
+
 <head>
     <meta charset="UTF-8" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -23,9 +29,6 @@
             <div class="collapse navbar-collapse" id="navbarText">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link active" href="#">Gerencia</a>
                     </li>
                     <li class="nav-item">
@@ -38,8 +41,6 @@
             </div>
         </div>
     </nav>
-
-
 
     <div class="card text-white mb-3"
         style="margin: 2% auto auto auto; width: 70rem; font-size: 20px; background-color: #3B3B3B;">
@@ -55,12 +56,12 @@
             <form>
                 <div class="form-row">
                     <div class="form-group col-md">
-                        <label for="codename-select">Nome</label>
-                        <input class="form-control" id="vaga-nome" />
+                        <label for="codename-select">Nome da vaga</label>
+                        <input class="form-control" id="vaga-nome" placeholder="Digite o nome da vaga" />
                     </div>
                     <div class="form-group col-md">
                         <label for="turing-amount">Exigencias</label>
-                        <input class="form-control" id="new-vaga-exigencia" />
+                        <input class="form-control" id="new-vaga-exigencia" placeholder="Digite as exigencias da vaga"/>
                     </div>
                 </div>
                 <br>
@@ -71,16 +72,17 @@
             </form>
         </div>
 
+        <hr>
 
-        <!-- Consulta vaga -->
+        <!-- Editor de exigencia de vagas -->
         <div class="card-body" id="vaga-section">
-            <h3 class="card-title vagar-codename" onclick="loadConsultaVagaName()">Consultar vaga</h3>
+            <h3 class="card-title vagar-codename" onclick="loadConsultaVagaName()">Exibir/Editar vaga</h3>
             <h6 class="card-subtitle mb-2 text-muted">Selecione um dos nomes das vagas criadas para exibir/editar suas
                 exigências.</h6>
             <form>
                 <div class="form-row">
                     <div class="form-group col-md">
-                        <label for="codename-select">Nome</label>
+                        <label for="codename-select">Nome da vaga</label>
                         <select class="form-control" id="vaga-name-select" onchange="loadExigenciasByName()"> </select>
                     </div>
                 </div>
@@ -88,68 +90,65 @@
                 <div class="form-row">
                     <div class="form-group col-md">
                         <label for="codename-select">Exigencias</label>
-                        <input class="form-control" id="select-vaga-exigencia" />
+                        <input class="form-control" id="select-vaga-exigencia" placeholder="Exigencias da vaga aparecerão aqui" />
                     </div>
                 </div>
                 <br>
                 <div class="form-row">
-                    <input class="form-control btn-success" style="font-size:25px;" type="button"
-                        value="Editar Exigencia" id="edit-vaga" onclick="editExigencias()" />
+                    <input class="form-control" type="button"
+                        style="font-size:25px; background-color: #6c757d; border-color: #6c757d;"
+                        value="Editar Exigencia" id="edit-vaga" onclick="editExigencias()" disabled/>
                 </div>
             </form>
         </div>
 
+        <hr>
+
         <!-- Status de um currículo -->
         <div class="card-body" id="vaga-section">
-            <h3 class="card-title vagar-codename" onclick="loadCurriculoVagaName()">Status do currículo</h3>
+            <h3 class="card-title vagar-codename" onclick="loadCurriculoVagaName()">Status do currículo por vaga</h3>
             <h6 class="card-subtitle mb-2 text-muted">
                 Selecione uma vaga, depois selecione um cpf afim de verificar suas respostas e seu status.
             </h6>
             <form>
                 <div class="form-row">
                     <div class="form-group col-md">
-                        <label for="codename-select">Nome</label>
-                        <select class="form-control" id="status-curriculo-vaga-name-select" onchange=""> </select>
+                        <label for="codename-select">Nome da vaga</label>
+                        <select class="form-control" id="curriculo-vaga-name-select" onchange="loadCurriculoCPF()"> </select>
                     </div>
                 </div>
                 <!-- Seleção de cpf para conseguir o currículo associado a ele -->
                 <div class="form-row">
                     <div class="form-group col-md">
                         <label for="codename-select">CPF</label>
-                        <select class="form-control" id="cpf-curriculo-select" onchange=""></select>
+                        <select class="form-control" id="curriculo-cpf-select" onchange="loadCurriculo()"></select>
                     </div>
                 </div>
                 <br>
-                <div class="form-row">
-                    <div class="form-group col-md">
-                        <label for="codename-select">Currículo</label>
-                    </div>
+                <div id="curriculo_vazio">
+                    <h3>Nenhum currículo selecionado</h3>
+                </div>
+                <div id="curriculo_preenchido" style="display: none;">
+                    <form>
+                        <div class="form-group col-md">
+                            <label for="codename-select" style="font-size: larger;">Currículo</label>
+                        </div>
+                        <div id="div_show"></div>
+                        <div class="form-group col-md">
+                            <label for="codename-select">Status</label>
+                            <select class="form-control" id="status-curriculo-select" onchange=""></select>
+                        </div>
+                    </form>
                 </div>
                 <br>
                 <div class="form-row">
-                    <div class="form-group col-md">
-                        <label for="codename-select">Status</label>
-                        <select class="form-control" id="status-curriculo-select" onchange=""></select>
-                    </div>
-                </div>
-                <br>
-                <div class="form-row">
-                    <input class="form-control btn-success" style="font-size:25px;" type="button" value="Editar status"
-                        id="edit-vaga" onclick="" />
+                    <input class="form-control btn-success" style="font-size:25px; background-color: #6c757d; border-color: #6c757d;" 
+                    type="button" value="Editar status" id="edit-vaga-status" onclick="" disabled/>
                 </div>
             </form>
         </div>
 
     </div>
-
-
-    </div>
-
-    <!-- Importing Ethers.js script -->
-    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
-
-    <!-- Importing our javascript file -->
-    <script src="./index.js"></script>
 
 </body>
 
