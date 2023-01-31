@@ -108,6 +108,35 @@ contract Vaga_CurriculoFactory {
         curriculos_CPFs.push(cpf);
     }
 
+     function removeCPFfromCurriculos_CPFs(
+        uint256 index
+    ) public {
+        if (index >= curriculos_CPFs.length) return;
+
+        curriculos_CPFs[index] = curriculos_CPFs[curriculos_CPFs.length - 1];
+        curriculos_CPFs.pop();
+    }
+
+    function getCPFIndex(string memory cpf) public returns(uint) {
+        uint index;
+        uint i = 0;
+        _curriculos[cpf] = Curriculo(address(0));
+        for (i = 0; i<curriculos_CPFs.length; i++){
+            if (keccak256(abi.encodePacked(curriculos_CPFs[i])) == keccak256(abi.encodePacked(cpf))) {
+                index = i;
+                break;
+            }       
+        }
+        return index;
+    }
+
+    function deleteCurriculoByCPF(string memory cpf) public {
+        uint index;
+        index = getCPFIndex(cpf);
+        removeCPFfromCurriculos_CPFs(index);
+    }
+
+
     // ------------  CPF ------------ 
     function setCurriculoCPF(address account, string memory cpf) public {
         Curriculo(_curriculos[cpf]).setCPF(account, cpf);
@@ -141,7 +170,15 @@ contract Vaga_CurriculoFactory {
 contract VagaFactory {
     mapping(string => Vaga_CurriculoFactory) _vagas;
     string[] nomes_vagas;
+    mapping(address => string) address_cpf;
+    mapping(string => string) cpf_vaga;
 
+    // Var que guarda quem é o atual usuário do contrato
+    address voterAddress;
+
+    //test
+    string test = "limpo";
+    uint test2 = 0;
 
     function createVaga(string memory nome_vaga, string[] memory exigencias) public {
         require (_vagas[nome_vaga] == Vaga_CurriculoFactory(address(0)));
@@ -187,10 +224,49 @@ contract VagaFactory {
         return _vagas[nome_vaga].getAllCurriculoCPFs();
     }
 
-     // ------------------------------------ Funções da curriculo ------------------------------------  
+    function deleteCurriculo(string memory cpf) public{
+        Vaga_CurriculoFactory(_vagas[cpf_vaga[cpf]]).deleteCurriculoByCPF(cpf);
+    }
+
+    // ------------------------------------ Funções da curriculo ------------------------------------  
     // ------------  Criação ------------ 
     function createVagaCurriculo(string memory nome_vaga, string memory cpf, string[] memory respostas) public {
+        // Checa se o cpf já está sendo usado, caso esteja apaga o registro atual e cria um novo
+        if(keccak256(abi.encodePacked(address_cpf[msg.sender])) == keccak256(abi.encodePacked(cpf))){
+            // O cpf repetido é usado como chave no mapping cpf_vaga para encontrar
+            // o nome da vaga a q está associado, depois o nome da vaga é usado
+            // no mapping _vagas para encontrar o contrato referente a vaga em questão.
+            // Com o contrato identificado se apaga dele o cpf em questão para q o mesmo
+            // seja registrado em outro contrato.
+            deleteCurriculo(cpf);
+        }
+        
+        // Guarda quem é o usuário atual do contrato
+        address_cpf[msg.sender] = cpf;
+        cpf_vaga[cpf] = nome_vaga;
+        // Cria nova vaga
         Vaga_CurriculoFactory(_vagas[nome_vaga]).createCurriculo(cpf, respostas);
+
+    }
+
+    function removeCPFfromVaga(string memory nome_vaga, uint index) public {
+        Vaga_CurriculoFactory(_vagas[nome_vaga]).removeCPFfromCurriculos_CPFs(index);
+    }
+
+    function checkIndexCPFVaga(string memory nome_vaga, string memory cpf) public{
+        test2 = Vaga_CurriculoFactory(_vagas[nome_vaga]).getCPFIndex(cpf);
+    }
+
+    function checkAddressCPF() external view returns(string memory) {
+        return address_cpf[msg.sender];
+    }
+
+    function testString() external view returns(string memory) {
+        return test;
+    }
+
+    function test2Uint() external view returns(uint){
+        return test2;
     }
 
     // ------------  Respostas ------------ 
@@ -206,6 +282,8 @@ contract VagaFactory {
     function getVagaCurriculoAddressByCPF(string memory nome_vaga, string memory cpf) external view returns(address){
         return Vaga_CurriculoFactory(_vagas[nome_vaga]).getCurriculoAddressByCPF(cpf);
     }
+
+    // ------------  ------------ 
 
 
 }

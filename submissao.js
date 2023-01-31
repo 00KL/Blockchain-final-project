@@ -21,6 +21,7 @@ window.onload = async () => {
 
 		/* Carrega os nomes das vagas */
 		loadVagaNameSubmissao();
+		searchCPFBySenderAddress();
 
         });
     });
@@ -36,6 +37,19 @@ window.loadVagaNameSubmissao = async () => {
 	for(var i = 0, l = VagaNameOptions.length; i < l; i++){
 		var codenameOption = VagaNameOptions[i];
 		selectBox.options.add( new Option(codenameOption, codenameOption, false) );
+	}
+}
+
+window.searchCPFBySenderAddress = async () => {
+	console.log("searchCPFBySenderAddress")
+	const senderAddress = await Contract.checkAddressCPF();
+	document.querySelector("#cpf").value = senderAddress;
+	console.log(senderAddress)
+	if(senderAddress == ''){
+		console.log("CPF não encontrado")
+	} else{
+		console.log("CPF encontrado")
+		document.querySelector("#cpf").disabled = true;
 	}
 }
 
@@ -57,13 +71,6 @@ window.loadCurriculo = async () => {
 	document.getElementById("edit-vaga").style.background='#198754';
 	document.getElementById("edit-vaga").style.border='#198754'
 	const vaga_exigencias = await Contract.getVagaExigencia(selected_vaga)
-
-	fields += '<div class="form-row">';
-	fields += '<div class="form-group col-md">';
-	fields += `<label>CPF</label>`;
-	fields += `<input class="form-control" id="cpf">`;
-	fields += '</div>';
-	fields += '</div>';
 
 	console.log(vaga_exigencias)
 

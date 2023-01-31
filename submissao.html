@@ -46,8 +46,18 @@
 
        <!-- Submissão de currículo -->
       <div class="card-body" id="vaga-section">
-        <h5 class="card-title" onclick="">Submeter currículo:</h5>
+        <h5 class="card-title" style="font-size: larger" onclick="">Submeter currículo:</h5>
+        <h6 class="card-subtitle mb-2 text-muted">
+            Digite seu CPF (cuidado, não poderá ser mudado) e selecione uma vaga para submeter seu currículo.
+        </h6>
+        <h6 class="card-subtitle mb-2 text-muted">
+            É possível submeter currículo apenas para uma vaga por vez.
+        </h6>
         <div class="form-row">
+        <div class="form-group col-md" id="cpf_div">
+            <label>CPF</label> 
+            <input class="form-control" id="cpf" />
+        </div>
           <div class="form-group col-md">
             <label for="codename-select">Selecione a vaga que deseja aplicar</label>
             <select class="form-control" id="curriculo-vaga-name-select" onchange="loadCurriculo()"> </select>

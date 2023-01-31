@@ -2,13 +2,31 @@
 export let Contract;
 
 // 2. Set contract address and ABI
-export const Contract_Address = "0x859475A9C228756B041c9966d2A889407d151749";
+export const Contract_Address = "0x8A434A21498C8c4B8735838795c6D4fcAcE63E88";
 // The Contract Application Binary Interface (ABI) is the standard way 
 // to interact with contracts in the Ethereum ecosystem, both from 
 // outside the blockchain and for contract-to-contract interaction. 
 // Data is encoded according to its type, as described in this specification. 
 // The encoding is not self describing and thus requires a schema in order to decode.
 export const Contract_ABI = [
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "nome_vaga",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "cpf",
+				"type": "string"
+			}
+		],
+		"name": "checkIndexCPFVaga",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
 	{
 		"inputs": [
 			{
@@ -67,11 +85,42 @@ export const Contract_ABI = [
 		"inputs": [
 			{
 				"internalType": "string",
+				"name": "cpf",
+				"type": "string"
+			}
+		],
+		"name": "deleteCurriculo",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
 				"name": "nome_vaga",
 				"type": "string"
 			}
 		],
 		"name": "incrementaVagaDisponibilidade",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "nome_vaga",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"name": "removeCPFfromVaga",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -115,6 +164,19 @@ export const Contract_ABI = [
 		"name": "setVagaExigencia",
 		"outputs": [],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "checkAddressCPF",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -249,6 +311,32 @@ export const Contract_ABI = [
 				"internalType": "string[]",
 				"name": "",
 				"type": "string[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "test2Uint",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "testString",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
 			}
 		],
 		"stateMutability": "view",
