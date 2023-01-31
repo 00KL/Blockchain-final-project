@@ -22,11 +22,30 @@ window.onload = async () => {
 		/* Carrega os nomes das vagas */
 		loadVagaNameSubmissao();
 		searchCPFBySenderAddress();
+		getChangeContratadoEvent();
 
         });
     });
 }
 
+window.getChangeContratadoEvent = async () => {
+	console.log("getChangeContratadoEvent")
+	Contract.on("changeContratado", (value, event)=>{
+		let transferEvent ={
+			value: value,
+			eventData: event,
+		}
+		console.log(JSON.stringify(transferEvent, null, 4))
+		const status_contratado = document.getElementById("status-contratado");
+		console.log(event);
+		status_contratado.checked = event
+		if(event){
+			alert("Você foi contratado!")
+		} else {
+			alert("Você foi demitido!")
+		}
+	})
+}
 
 window.loadVagaNameSubmissao = async () => {
 	console.log("loadVagaNameSubmissao")
@@ -42,14 +61,40 @@ window.loadVagaNameSubmissao = async () => {
 
 window.searchCPFBySenderAddress = async () => {
 	console.log("searchCPFBySenderAddress")
-	const senderAddress = await Contract.checkAddressCPF();
-	document.querySelector("#cpf").value = senderAddress;
-	console.log(senderAddress)
-	if(senderAddress == ''){
+	const senderCPF = await Contract.checkAddressCPF();
+	document.querySelector("#cpf").value = senderCPF;
+	console.log(senderCPF)
+	if(senderCPF == ''){
 		console.log("CPF não encontrado")
 	} else{
 		console.log("CPF encontrado")
+		const selected_vaga =  await Contract.getVagaByCPF(senderCPF);
+		const curriculo = await Contract.getVagaCurriculoRespostas(selected_vaga, senderCPF)
+		const vaga_exigencias = await Contract.getVagaExigencia(selected_vaga)
+		const container = document.getElementById("div_show");
+		const status_contratado = document.getElementById("status-contratado");
+		status_contratado.checked = await Contract.getVagaCurriculoContratado(selected_vaga, senderCPF);
+		console.log("status_contratado: ", status_contratado.checked);
+
 		document.querySelector("#cpf").disabled = true;
+		document.querySelector("#curriculo-vaga-name-select").value = selected_vaga; 
+		
+		let cont = 0;
+		let  fields = '';
+		vaga_exigencias.forEach(item => {
+			console.log(item)
+			fields += '<div class="form-row">';
+			fields += '<div class="form-group col-md">';
+			fields += `<label>${item.charAt(0).toUpperCase() + item.slice(1)}</label>`;
+			fields += `<input class="form-control" id="exigencia_${item}" value="${curriculo[cont]}">`;
+			fields += '</div>';
+			fields += '</div>';
+			cont++;
+		})
+		container.innerHTML = fields;
+		document.getElementById("edit-vaga").disabled = false;
+		document.getElementById("edit-vaga").style.background='#198754';
+		document.getElementById("edit-vaga").style.border='#198754'
 	}
 }
 

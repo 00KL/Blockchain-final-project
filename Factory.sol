@@ -8,7 +8,7 @@ contract Curriculo {
     address private _owner;
     address private _factory;
     string[] private _respostas;
-    bool contratado = false;
+    bool private _contratado = false;
 
      modifier onlyOwner(address caller) {
         require(caller == _owner, "Voce nao e dono deste curriculo");
@@ -50,7 +50,14 @@ contract Curriculo {
         return _respostas;
     }
 
+    // ---------- Contratado/status -----------
+    function setContratado(bool status) public {
+        _contratado = status;
+    }
 
+    function getContratado() public view returns(bool){
+        return _contratado;
+    }
 
 }
 
@@ -138,7 +145,7 @@ contract Vaga_CurriculoFactory {
 
 
     // ------------  CPF ------------ 
-    function setCurriculoCPF(address account, string memory cpf) public {
+    function setCurriculoCPF(address account, string memory cpf) external {
         Curriculo(_curriculos[cpf]).setCPF(account, cpf);
     }
 
@@ -165,20 +172,26 @@ contract Vaga_CurriculoFactory {
         return curriculos_CPFs;
     }
 
+    // ----------- Contratado/status --------------
+    function setCurriculoContratado(string memory cpf, bool status) external {
+       Curriculo(_curriculos[cpf]).setContratado(status);
+    }
+
+    function getCurriculoContratado(string memory cpf) public view returns(bool) {
+        return Curriculo(_curriculos[cpf]).getContratado();
+    }
+
 }
 
 contract VagaFactory {
+    // Gerente
+    // address gerenteAddress = 0x4A35eFD10c4b467508C35f8C309Ebc34ae1e129a;
+    // address gerente = 0xA5095296F7fF9Bdb01c22e3E0aC974C8963378ad; professora
+
     mapping(string => Vaga_CurriculoFactory) _vagas;
     string[] nomes_vagas;
     mapping(address => string) address_cpf;
     mapping(string => string) cpf_vaga;
-
-    // Var que guarda quem é o atual usuário do contrato
-    address voterAddress;
-
-    //test
-    string test = "limpo";
-    uint test2 = 0;
 
     function createVaga(string memory nome_vaga, string[] memory exigencias) public {
         require (_vagas[nome_vaga] == Vaga_CurriculoFactory(address(0)));
@@ -202,30 +215,23 @@ contract VagaFactory {
         return nomes_vagas;
     }
 
+    // function checkIfGerente() external view returns(bool){
+    //     return msg.sender == gerenteAddress;
+    // }
+
     // ------------ vaga Address ------------ 
-    function getVagaAddressByName(string memory nome_vaga) external view returns(address){
-        return address(_vagas[nome_vaga]);
-    }
+    // function getVagaAddressByName(string memory nome_vaga) external view returns(address){
+    //     return address(_vagas[nome_vaga]);
+    // }
 
     // ------------  Disponibilidade ------------ 
-    function incrementaVagaDisponibilidade(string memory nome_vaga) external {
-        Vaga_CurriculoFactory(_vagas[nome_vaga]).incrementaDisponibilidade();
-    }
-
-    function decrementaVagaDisponibilidade(string memory nome_vaga) external {
-        Vaga_CurriculoFactory(_vagas[nome_vaga]).decrementaDisponibilidade();
-    }
-
-    function getVagaDisponibilidade(string memory nome_vaga) external view returns (uint256) {
-        return _vagas[nome_vaga].getDisponibilidade();
-    }
 
     function getVagaCPFsByName(string memory nome_vaga) external view returns (string[] memory) {
         return _vagas[nome_vaga].getAllCurriculoCPFs();
     }
 
-    function deleteCurriculo(string memory cpf) public{
-        Vaga_CurriculoFactory(_vagas[cpf_vaga[cpf]]).deleteCurriculoByCPF(cpf);
+    function getVagaByCPF(string memory cpf) public view returns(string memory){
+        return cpf_vaga[cpf];
     }
 
     // ------------------------------------ Funções da curriculo ------------------------------------  
@@ -238,7 +244,7 @@ contract VagaFactory {
             // no mapping _vagas para encontrar o contrato referente a vaga em questão.
             // Com o contrato identificado se apaga dele o cpf em questão para q o mesmo
             // seja registrado em outro contrato.
-            deleteCurriculo(cpf);
+            Vaga_CurriculoFactory(_vagas[cpf_vaga[cpf]]).deleteCurriculoByCPF(cpf);
         }
         
         // Guarda quem é o usuário atual do contrato
@@ -253,20 +259,8 @@ contract VagaFactory {
         Vaga_CurriculoFactory(_vagas[nome_vaga]).removeCPFfromCurriculos_CPFs(index);
     }
 
-    function checkIndexCPFVaga(string memory nome_vaga, string memory cpf) public{
-        test2 = Vaga_CurriculoFactory(_vagas[nome_vaga]).getCPFIndex(cpf);
-    }
-
     function checkAddressCPF() external view returns(string memory) {
         return address_cpf[msg.sender];
-    }
-
-    function testString() external view returns(string memory) {
-        return test;
-    }
-
-    function test2Uint() external view returns(uint){
-        return test2;
     }
 
     // ------------  Respostas ------------ 
@@ -283,7 +277,19 @@ contract VagaFactory {
         return Vaga_CurriculoFactory(_vagas[nome_vaga]).getCurriculoAddressByCPF(cpf);
     }
 
-    // ------------  ------------ 
+    // ----------- Contratado/status --------------
+    // Create an  transfer event 
+    event changeContratado(string cpf, bool status);
+
+    function contratarVagaCurriculo(string memory nome_vaga, string memory cpf, bool status) public {
+        Vaga_CurriculoFactory(_vagas[nome_vaga]).setCurriculoContratado(cpf, status);
+        emit changeContratado(cpf, status);
+    }
+
+    function getVagaCurriculoContratado(string memory nome_vaga, string memory cpf) public view returns (bool) {
+        return Vaga_CurriculoFactory(_vagas[nome_vaga]).getCurriculoContratado(cpf);
+    }
+
 
 
 }

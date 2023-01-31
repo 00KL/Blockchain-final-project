@@ -2,13 +2,32 @@
 export let Contract;
 
 // 2. Set contract address and ABI
-export const Contract_Address = "0x8A434A21498C8c4B8735838795c6D4fcAcE63E88";
+export const Contract_Address = "0xF3c726717217F396e08D2711363adF86D5A172CB";
 // The Contract Application Binary Interface (ABI) is the standard way 
 // to interact with contracts in the Ethereum ecosystem, both from 
 // outside the blockchain and for contract-to-contract interaction. 
 // Data is encoded according to its type, as described in this specification. 
 // The encoding is not self describing and thus requires a schema in order to decode.
 export const Contract_ABI = [
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "cpf",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "status",
+				"type": "bool"
+			}
+		],
+		"name": "changeContratado",
+		"type": "event"
+	},
 	{
 		"inputs": [
 			{
@@ -20,9 +39,14 @@ export const Contract_ABI = [
 				"internalType": "string",
 				"name": "cpf",
 				"type": "string"
+			},
+			{
+				"internalType": "bool",
+				"name": "status",
+				"type": "bool"
 			}
 		],
-		"name": "checkIndexCPFVaga",
+		"name": "contratarVagaCurriculo",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -64,45 +88,6 @@ export const Contract_ABI = [
 			}
 		],
 		"name": "createVagaCurriculo",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "nome_vaga",
-				"type": "string"
-			}
-		],
-		"name": "decrementaVagaDisponibilidade",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "cpf",
-				"type": "string"
-			}
-		],
-		"name": "deleteCurriculo",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "nome_vaga",
-				"type": "string"
-			}
-		],
-		"name": "incrementaVagaDisponibilidade",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -196,16 +181,16 @@ export const Contract_ABI = [
 		"inputs": [
 			{
 				"internalType": "string",
-				"name": "nome_vaga",
+				"name": "cpf",
 				"type": "string"
 			}
 		],
-		"name": "getVagaAddressByName",
+		"name": "getVagaByCPF",
 		"outputs": [
 			{
-				"internalType": "address",
+				"internalType": "string",
 				"name": "",
-				"type": "address"
+				"type": "string"
 			}
 		],
 		"stateMutability": "view",
@@ -267,6 +252,30 @@ export const Contract_ABI = [
 				"type": "string"
 			}
 		],
+		"name": "getVagaCurriculoContratado",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "nome_vaga",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "cpf",
+				"type": "string"
+			}
+		],
 		"name": "getVagaCurriculoRespostas",
 		"outputs": [
 			{
@@ -286,57 +295,12 @@ export const Contract_ABI = [
 				"type": "string"
 			}
 		],
-		"name": "getVagaDisponibilidade",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "nome_vaga",
-				"type": "string"
-			}
-		],
 		"name": "getVagaExigencia",
 		"outputs": [
 			{
 				"internalType": "string[]",
 				"name": "",
 				"type": "string[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "test2Uint",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "testString",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
 			}
 		],
 		"stateMutability": "view",

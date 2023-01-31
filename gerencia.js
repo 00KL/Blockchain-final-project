@@ -136,7 +136,8 @@ window.loadCurriculoVagaName = async () => {
 	VagaNameOptions = await Contract.getAllNomesVagas();
 	//   var selectBox = document.querySelector("#vaga-name-select");
       var selectBox2 = document.querySelector("#curriculo-vaga-name-select");
-	  removeOptions(selectBox);
+	  removeOptions(selectBox2);
+	  selectBox2.options.add (new Option("Selecione uma vaga", "Selecione uma vaga", false));
       for(var i = 0, l = VagaNameOptions.length; i < l; i++){
         var codenameOption = VagaNameOptions[i];
 		// selectBox.options.add( new Option(codenameOption, codenameOption, false) );

@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="imagem/png" href="./assets/icone-curriculo.svg" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
@@ -63,11 +64,18 @@
             <select class="form-control" id="curriculo-vaga-name-select" onchange="loadCurriculo()"> </select>
           </div>
         </div>
+        <!-- Default disabled switch -->
+        <div class="form-check form-switch" style="padding-top: 0.2em;">
+            <input class="form-check-input" type="checkbox" role="switch" id="status-contratado" disabled />
+            <label class="form-check-label" for="status-contratado">Status de contração</label>
+        </div>
         <hr>
         <form>
           <div id="div_show"></div>
           <hr>
-          <input class="form-control" style="font-size:25px; background-color: #6c757d; border-color: #6c757d;"  type="button" value="Submeter Currículo" id="edit-vaga" onclick="setNewCurriculo()" disabled />
+          <input class="form-control" 
+            style="font-size:25px; background-color: #6c757d; border-color: #6c757d; color: white;"  
+            type="button" value="Submeter Currículo" id="edit-vaga" onclick="setNewCurriculo()" disabled />
         </form>
       </div>
 

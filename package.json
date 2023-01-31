@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "bootstrap-icons": "^1.10.3",
     "connect": "^3.7.0",
     "ethers": "^5.7.2",
     "serve-static": "^1.15.0"
