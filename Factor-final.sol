@@ -29,33 +29,25 @@ contract Curriculo {
         }
     }
 
-
-    // ------------  CPF ------------ 
-    function getCPF() public view returns (string memory) {
-        return _cpf;
-    }
-
-    function setCPF(address caller, string memory nome ) public onlyOwner(caller) {
-        _cpf = nome;
-    }
+    // CPF não é alterado
 
     // ------------  Respostas ------------ 
-    function setRespostas(string[] memory respostas) public {
+    function setRespostas(address caller, string[] memory respostas) public onlyFactory onlyOwner(caller) {
         delete _respostas;
         for (uint i=0; i < respostas.length; i++){
             _respostas.push(respostas[i]);
         }
     }
-    function getRespostas() public view returns(string[] memory) {
+    function getRespostas() public onlyFactory view returns(string[] memory)  {
         return _respostas;
     }
 
     // ---------- Contratado/status -----------
-    function setContratado(bool status) public {
+    function setContratado(bool status) public onlyFactory{
         _contratado = status;
     }
 
-    function getContratado() public view returns(bool){
+    function getContratado() public onlyFactory view returns(bool)  {
         return _contratado;
     }
 
@@ -65,7 +57,6 @@ contract Vaga_CurriculoFactory {
 
     string private _nome;
     address private _factory;
-    uint256 private _disponibilidade;
     string[] private curriculos_CPFs;
     string[] _exigencias;
 
@@ -74,23 +65,12 @@ contract Vaga_CurriculoFactory {
     constructor(string memory nome, string[] memory exigencias) {
         _factory =  msg.sender;
         _nome = nome;
-        _disponibilidade++;
         for (uint i=0; i < exigencias.length; i++){
             _exigencias.push(exigencias[i]);
         }
     }
 
     //  ------------ Funções relacionadas a vaga ------------ 
-    //  ------------ Disponibilidade ------------ 
-    function getDisponibilidade() public view returns(uint256) {
-        return _disponibilidade;
-    }
-    function incrementaDisponibilidade() public {
-        _disponibilidade++;
-    }
-    function decrementaDisponibilidade() public {
-        _disponibilidade--;
-    }
 
     // ------------  Exigencias ------------ 
     function setExigencias(string[] memory exigencias) public {
@@ -105,23 +85,14 @@ contract Vaga_CurriculoFactory {
 
     // ------------------------------------ Funções da curriculo ------------------------------------  
     // ------------  Criação ------------ 
-    function createCurriculo(string memory cpf, string[] memory respostas) public {
+    function createCurriculo(address owner, string memory cpf, string[] memory respostas) public {
         // pergunta se existe um curriculo criado pelo sender atual (quem está acessando o contrato)
         // Para fazer essa checagem se conslta a lista _curriculos na "posição" msg.sender e se compara com
         // um curriculo criado apartir de um endereço vazio "address(0)". 
         require (_curriculos[cpf] == Curriculo(address(0)));
         require (respostas.length == _exigencias.length);
-        _curriculos[cpf] = new Curriculo(msg.sender, cpf, respostas);
+        _curriculos[cpf] = new Curriculo(owner, cpf, respostas);
         curriculos_CPFs.push(cpf);
-    }
-
-     function removeCPFfromCurriculos_CPFs(
-        uint256 index
-    ) public {
-        if (index >= curriculos_CPFs.length) return;
-
-        curriculos_CPFs[index] = curriculos_CPFs[curriculos_CPFs.length - 1];
-        curriculos_CPFs.pop();
     }
 
     function getCPFIndex(string memory cpf) public returns(uint) {
@@ -140,31 +111,20 @@ contract Vaga_CurriculoFactory {
     function deleteCurriculoByCPF(string memory cpf) public {
         uint index;
         index = getCPFIndex(cpf);
-        removeCPFfromCurriculos_CPFs(index);
+        if (index >= curriculos_CPFs.length) return;
+
+        curriculos_CPFs[index] = curriculos_CPFs[curriculos_CPFs.length - 1];
+        curriculos_CPFs.pop();
     }
 
-
-    // ------------  CPF ------------ 
-    function setCurriculoCPF(address account, string memory cpf) external {
-        Curriculo(_curriculos[cpf]).setCPF(account, cpf);
-    }
-
-    function getCurriculoCPF(string memory cpf) public view returns(string memory) {
-        return (_curriculos[cpf].getCPF());
-    }
 
     // ------------  Respostas ------------ 
-    function setCurriculoRespostas(string memory cpf, string[] memory respostas) external {
-       Curriculo(_curriculos[cpf]).setRespostas(respostas);
+    function setCurriculoRespostas(address owner, string memory cpf, string[] memory respostas) external {
+       Curriculo(_curriculos[cpf]).setRespostas(owner, respostas);
     }
 
     function getCurriculoRespostas(string memory cpf) public view returns(string[] memory){
         return _curriculos[cpf].getRespostas();
-    }
-
-    // ------------ vaga Address ------------ 
-    function getCurriculoAddressByCPF(string memory CPF) external view returns(address){
-        return address(_curriculos[CPF]);
     }
 
     // ------------  CPFs ------------ 
@@ -186,10 +146,16 @@ contract Vaga_CurriculoFactory {
 contract VagaFactory {
     // Gerente
     address gerenteAddress = 0x4A35eFD10c4b467508C35f8C309Ebc34ae1e129a;
-    // address gerente = 0xA5095296F7fF9Bdb01c22e3E0aC974C8963378ad; professora
+    // address gerenteAddress = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4; //test
+    // address gerenteAddress = 0xA5095296F7fF9Bdb01c22e3E0aC974C8963378ad; //professora
 
     modifier onlyGerente() {
         require(msg.sender == gerenteAddress, "Esta funcao somente pode ser usada pelo gerente");
+        _;
+    }
+
+    modifier onlyNaoEGerente() {
+        require(msg.sender != gerenteAddress, "Gerente, vc ja tem emprego");
         _;
     }
 
@@ -198,10 +164,14 @@ contract VagaFactory {
     mapping(address => string) address_cpf;
     mapping(string => string) cpf_vaga;
 
-    function createVaga(string memory nome_vaga, string[] memory exigencias) public {
+    function createVaga(string memory nome_vaga, string[] memory exigencias) public onlyGerente {
         require (_vagas[nome_vaga] == Vaga_CurriculoFactory(address(0)));
         _vagas[nome_vaga] = new Vaga_CurriculoFactory(nome_vaga, exigencias);
         nomes_vagas.push(nome_vaga);
+    }
+
+    function isGerente() external view returns(bool){
+        return msg.sender == gerenteAddress;
     }
 
     // ------------------------------------ Funções da vaga ------------------------------------ 
@@ -220,14 +190,6 @@ contract VagaFactory {
         return nomes_vagas;
     }
 
-    // function checkIfGerente() external view returns(bool){
-    //     return msg.sender == gerenteAddress;
-    // }
-
-    // ------------ vaga Address ------------ 
-    // function getVagaAddressByName(string memory nome_vaga) external view returns(address){
-    //     return address(_vagas[nome_vaga]);
-    // }
 
     // ------------  Disponibilidade ------------ 
 
@@ -241,7 +203,7 @@ contract VagaFactory {
 
     // ------------------------------------ Funções da curriculo ------------------------------------  
     // ------------  Criação ------------ 
-    function createVagaCurriculo(string memory nome_vaga, string memory cpf, string[] memory respostas) public {
+    function createVagaCurriculo(string memory nome_vaga, string memory cpf, string[] memory respostas) public onlyNaoEGerente {
         // Checa se o cpf já está sendo usado, caso esteja apaga o registro atual e cria um novo
         if(keccak256(abi.encodePacked(address_cpf[msg.sender])) == keccak256(abi.encodePacked(cpf))){
             // O cpf repetido é usado como chave no mapping cpf_vaga para encontrar
@@ -256,12 +218,8 @@ contract VagaFactory {
         address_cpf[msg.sender] = cpf;
         cpf_vaga[cpf] = nome_vaga;
         // Cria nova vaga
-        Vaga_CurriculoFactory(_vagas[nome_vaga]).createCurriculo(cpf, respostas);
+        Vaga_CurriculoFactory(_vagas[nome_vaga]).createCurriculo(msg.sender, cpf, respostas);
 
-    }
-
-    function removeCPFfromVaga(string memory nome_vaga, uint index) public {
-        Vaga_CurriculoFactory(_vagas[nome_vaga]).removeCPFfromCurriculos_CPFs(index);
     }
 
     function checkAddressCPF() external view returns(string memory) {
@@ -270,23 +228,18 @@ contract VagaFactory {
 
     // ------------  Respostas ------------ 
     function setVagaCurriculoRespostas(string memory nome_vaga, string memory cpf, string[] memory respostas) external {
-       Vaga_CurriculoFactory(_vagas[nome_vaga]).setCurriculoRespostas(cpf, respostas);
+       Vaga_CurriculoFactory(_vagas[nome_vaga]).setCurriculoRespostas(msg.sender, cpf, respostas);
     }
 
     function getVagaCurriculoRespostas(string memory nome_vaga, string memory cpf) public view returns(string[] memory){
         return Vaga_CurriculoFactory(_vagas[nome_vaga]).getCurriculoRespostas(cpf);
     }
 
-    // ------------ vaga Address ------------ 
-    function getVagaCurriculoAddressByCPF(string memory nome_vaga, string memory cpf) external view returns(address){
-        return Vaga_CurriculoFactory(_vagas[nome_vaga]).getCurriculoAddressByCPF(cpf);
-    }
-
     // ----------- Contratado/status --------------
     // Create an  transfer event 
     event changeContratado(string cpf, bool status);
 
-    function contratarVagaCurriculo(string memory nome_vaga, string memory cpf, bool status) public {
+    function contratarVagaCurriculo(string memory nome_vaga, string memory cpf, bool status) public onlyGerente {
         Vaga_CurriculoFactory(_vagas[nome_vaga]).setCurriculoContratado(cpf, status);
         emit changeContratado(cpf, status);
     }

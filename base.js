@@ -2,7 +2,7 @@
 export let Contract;
 
 // 2. Set contract address and ABI
-export const Contract_Address = "0x37632D20a6D78232763452Cb7DA3cBE8Af49AC88";
+export const Contract_Address = "0x9aEE797f7e908abBecc16Ecd6F7901F82a21C217";
 // The Contract Application Binary Interface (ABI) is the standard way 
 // to interact with contracts in the Ethereum ecosystem, both from 
 // outside the blockchain and for contract-to-contract interaction. 
@@ -27,19 +27,6 @@ export const Contract_ABI = [
 		],
 		"name": "changeContratado",
 		"type": "event"
-	},
-	{
-		"inputs": [],
-		"name": "checkAddressCPF",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
 	},
 	{
 		"inputs": [
@@ -106,6 +93,60 @@ export const Contract_ABI = [
 		"type": "function"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "nome_vaga",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "cpf",
+				"type": "string"
+			},
+			{
+				"internalType": "string[]",
+				"name": "respostas",
+				"type": "string[]"
+			}
+		],
+		"name": "setVagaCurriculoRespostas",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "nome_vaga",
+				"type": "string"
+			},
+			{
+				"internalType": "string[]",
+				"name": "exigencia",
+				"type": "string[]"
+			}
+		],
+		"name": "setVagaExigencia",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "checkAddressCPF",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "getAllNomesVagas",
 		"outputs": [
@@ -151,30 +192,6 @@ export const Contract_ABI = [
 				"internalType": "string[]",
 				"name": "",
 				"type": "string[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "nome_vaga",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "cpf",
-				"type": "string"
-			}
-		],
-		"name": "getVagaCurriculoAddressByCPF",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
 			}
 		],
 		"stateMutability": "view",
@@ -248,62 +265,16 @@ export const Contract_ABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [
+		"inputs": [],
+		"name": "isGerente",
+		"outputs": [
 			{
-				"internalType": "string",
-				"name": "nome_vaga",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "index",
-				"type": "uint256"
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
 			}
 		],
-		"name": "removeCPFfromVaga",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "nome_vaga",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "cpf",
-				"type": "string"
-			},
-			{
-				"internalType": "string[]",
-				"name": "respostas",
-				"type": "string[]"
-			}
-		],
-		"name": "setVagaCurriculoRespostas",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "nome_vaga",
-				"type": "string"
-			},
-			{
-				"internalType": "string[]",
-				"name": "exigencia",
-				"type": "string[]"
-			}
-		],
-		"name": "setVagaExigencia",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	}
 ]
