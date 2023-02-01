@@ -189,8 +189,8 @@ window.loadCurriculo = async () => {
 	document.getElementById("edit-vaga-status").style.border='#198754';
 
 	const curriculo = await Contract.getVagaCurriculoRespostas(selected_vaga, curriculo_cpf)
-	console.log(curriculo)
 	const vaga_exigencias = await Contract.getVagaExigencia(selected_vaga)
+	console.log(curriculo)
 	let cont = 0;
 	vaga_exigencias.forEach(item => {
 		console.log(item)
@@ -202,6 +202,25 @@ window.loadCurriculo = async () => {
 		fields += '</div>';
 		cont++;
 	})
+	let status_contratado = await Contract.getVagaCurriculoContratado(selected_vaga, curriculo_cpf);
+	console.log(status_contratado)
+	fields += `<div class="form-check form-switch" style="padding-top: 0.2em;">`
+	if(status_contratado == true) {
+		fields += `<input class="form-check-input" type="checkbox" role="switch" id="status-contratado" checked />`
+	} else {
+		fields += `<input class="form-check-input" type="checkbox" role="switch" id="status-contratado" />`
+	}
+	fields += `<label class="form-check-label" for="status-contratado">Status de contração</label>`
+	fields += `</div>`
 	container.innerHTML = fields;
+}
+
+window.editCurriculoContratadoStatus = async () => {
+	console.log("editCurriculo")
+	const selected_vaga =  document.querySelector("#curriculo-vaga-name-select").value
+	const curriculo_cpf = document.querySelector("#curriculo-cpf-select").value
+	const status_contratado = document.querySelector("#status-contratado").checked
+	console.log(status_contratado)
+	Contract.contratarVagaCurriculo(selected_vaga, curriculo_cpf, status_contratado)
 }
 
